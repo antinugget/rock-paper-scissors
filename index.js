@@ -1,8 +1,8 @@
 function getComputerChoice() {
-    choice = Math.floor(Math.random()*(Math.floor(4)-Math.ceil(1))+Math.ceil(1))
-    if (choice === 1) { 
+    choice = Math.floor(Math.random()*3)
+    if (choice === 0) { 
         return "rock"
-    } else if (choice === 2) {
+    } else if (choice === 1) {
         return "paper"
     } else {
         return "scissors"
@@ -10,11 +10,11 @@ function getComputerChoice() {
 };
 
 function win(player, computer) {
-    return "You win: " + player + " beats " + computer;
+    return "You win: " + player.toLowerCase() + " beats " + computer
 };
 
 function lose(player, computer) {
-    return "You lose: " + computer + " beats " + player;
+    return "You lose: " + computer + " beats " + player.toLowerCase()
 };
 
 function tie() {
@@ -22,36 +22,53 @@ function tie() {
 };
 
 function playRound(playerChoice, computerChoice) {
-    if (playerChoice === "rock") {
-        if (computerChoice === "paper") {
-            lose(playerChoice, computerChoice)
-        } else if (computerChoice === "scissors") {
-            win(playerChoice, computerChoice)
-        } else {
-            tie()
-        };
-    } else if (playerChoice === "paper") {
-        if (computerChoice === "paper") {
-            tie()
-        } else if (computerChoice === "scissors") {
-            lose(playerChoice, computerChoice)
-        } else {
-            win(playerChoice, computerChoice)
-        };
-    } else if (playerChoice === "scissors") {
-        if (computerChoice === "paper") {
-            win(playerChoice, computerChoice)
-        } else if (computerChoice === "scissors") {
-            tie()
-        } else {
-            lose(playerChoice, computerChoice)
-        };
+    if (playerChoice.toLowerCase() === "rock" && computerChoice === "scissors") {
+        return win(playerChoice, computerChoice)
+    } else if (playerChoice.toLowerCase() === "rock" && computerChoice === "paper") {
+        return lose(playerChoice, computerChoice)
+    } else if (playerChoice.toLowerCase() === "rock" && computerChoice === "rock") {
+        return tie()
+    } else if (playerChoice.toLowerCase() === "paper" && computerChoice === "rock") {
+        return win(playerChoice, computerChoice)
+    } else if (playerChoice.toLowerCase() === "paper" && computerChoice === "scissors") {
+        return lose(playerChoice, computerChoice)
+    } else if (playerChoice.toLowerCase() === "paper" && computerChoice === "paper") {
+        return tie()
+    } else if (playerChoice.toLowerCase() === "scissors" && computerChoice === "paper") {
+        return win(playerChoice, computerChoice)
+    } else if (playerChoice.toLowerCase() === "scissors" && computerChoice === "rock") {
+        return lose(playerChoice, computerChoice)
+    } else if (playerChoice.toLowerCase() === "scissors" && computerChoice === "scissors") {
+        return tie()
     } else {
-        alert("Please submit rock, paper or scissors.")
-    };
-};
+        return "Please input rock, paper or scissors ^^"
+    }
+}
 
-const playerSelection = "rock";
-const computerSelection = getComputerChoice();
+let score = 0
+let wins = 0
+let loses = 0
+for (let i = 0; i < 5; i++) {
+    let playerSel = prompt("What do you play?")
+    result = playRound(playerSel, getComputerChoice())
+    if (result.search('You win: ') !== -1) {
+        wins += 1
+        score += 1
+    } else if (result.search('You lose: ') !== -1) {
+        loses += 1
+        score += 1
+    } else if (result.search("It's a tie!") !== -1) {
+        score += 1
+    } else {
+        i -= 1
+    }
+    console.log(result, "\nRound:", score, "Wins:", wins, "Loses:", loses)
+}
 
-console.log(playRound(playerSelection,computerSelection));
+if (wins > loses) {
+    console.log("You win the game!")
+} else if (loses > wins) {
+    console.log("You lose the game...")
+} else {
+    console.log ("The game is tied!")
+}
